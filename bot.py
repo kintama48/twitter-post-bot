@@ -90,10 +90,11 @@ async def on_message(message):
 
 
 def tweet_media(message, link=None):
+    message = message.replace("*","")
+    message = message.replace("`","")
     if link:
         request = requests.get(link, stream=True)
         filename = "temp.jpg"
-        print("inside link")
         if request.status_code == 200:
             try:
                 with open(filename, 'wb') as image:
@@ -103,7 +104,7 @@ def tweet_media(message, link=None):
                 return discord.Embed(description="The attachment is not an image :(", color=0xbf000a)
             try:
                 api.update_with_media(filename, status=message)
-                print("message sent")
+                print("message sent with media")
                 os.remove(filename)
             except:
                 return discord.Embed(description="Picture size too big :(", color=0xbf000a)
